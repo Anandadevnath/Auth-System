@@ -1,13 +1,33 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from 'react-router-dom';
+import { registerUser } from '../api/api.js'
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function Login() {
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+
   const navigate = useNavigate();
 
-  const handleregister = (e) => {
-    navigate('/login');
+  const handleregister = async (e) => {
+    if (password !== confirmPassword) {
+      toast.error('Passwords do not match!')
+    }
+
+    try {
+      const response = await registerUser({ username, email, password });
+      console.log('User register:', response.data);
+      toast.success('Registration successful!');
+      navigate('/login');
+    } catch (error) {
+      console.error('Registration error:', error.response?.data || error.messege);
+      toast.error('Registration failed!')
+    }
   };
 
   return (
@@ -18,21 +38,29 @@ function Login() {
         <Input
           type="text"
           placeholder="Username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
         />
         <h1>Email</h1>
         <Input
           type="email"
           placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
         />
         <h1>Password</h1>
         <Input
           type="password"
           placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
         />
         <h1>ConfirmPassword</h1>
         <Input
           type="password"
           placeholder="ConfirmPassword"
+          value={confirmPassword}
+          onChange={(e) => setConfirmPassword(e.target.value)}
         />
         <Button
           className="text-black cursor-pointer hover:bg-[#d2d2d2] my-1.5"

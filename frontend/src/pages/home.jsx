@@ -19,7 +19,7 @@ function home() {
   };
 
   return (
-    <div className='flex items-center justify-center'>
+    <div className='grid w-full max-w-sm items-center gap-1.5 mx-auto my-74'>
 
       <Button
         className="text-black cursor-pointer hover:bg-[#d2d2d2]"
