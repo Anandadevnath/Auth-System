@@ -1,13 +1,27 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from 'react-router-dom';
+import { loginUser } from '../api/api.js';
+import { toast } from 'sonner';
 
 function Login() {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+
     const navigate = useNavigate();
 
-    const navigateLogin = (e) => {
-        navigate('/');
+    const handleLogin = async (e) => {
+        try {
+            const res = await loginUser({ email, password });
+            console.log('Login successful:', res.data);
+            toast('Login successful!')
+            localStorage.setItem('token', res.data.token)
+            navigate('/');
+        } catch (error) {
+            console.log('Login error:', error.res?.data || error.message);
+            toast('Login failed! Please check your credentials.');
+        }
     };
 
     return (
@@ -23,16 +37,20 @@ function Login() {
             <Input
                 type="email"
                 placeholder="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
             />
             <h1>Password</h1>
             <Input
                 type="password"
                 placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
             />
             <Button
                 className="text-black cursor-pointer hover:bg-[#d2d2d2] my-1.5"
                 variant="outline"
-                onClick={navigateLogin}
+                onClick={handleLogin}
             >
                 Login
             </Button>

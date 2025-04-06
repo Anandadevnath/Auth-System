@@ -14,9 +14,10 @@ function home() {
     navigate('/register');
   };
 
-  const navigateLogout = (e) => {
-    navigate('/login');
+  const navigatelogout = (e) => {
+    navigate('/logout');
   };
+
 
   return (
     <div className='grid w-full max-w-sm items-center gap-1.5 mx-auto my-74'>
@@ -40,7 +41,7 @@ function home() {
       <Button
         className="text-black cursor-pointer hover:bg-[#d2d2d2]"
         variant="outline"
-        onClick={navigateLogout}
+        onClick={navigatelogout}
       >
         Logout
       </Button>
