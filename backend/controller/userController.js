@@ -37,13 +37,14 @@ const createUser = asynchandler(async (req, res) => {
 })
 
 const loginUser = asynchandler(async (req, res) => {
-    const { email, password } = req.body
+    const { email, password, username } = req.body
 
-    const existingUser = await User.findOne({ email });
+    const existingUser = await User.findOne({ email});
+
     if (existingUser) {
-        const isvalid = await bcrypt.compare(password, existingUser.password)
+        const isvalidPassword = await bcrypt.compare(password, existingUser.password)
 
-        if (isvalid) {
+        if (isvalidPassword) {
             const token = createToken(res, existingUser._id);
             res.status(201).json({
                 _id: existingUser._id,

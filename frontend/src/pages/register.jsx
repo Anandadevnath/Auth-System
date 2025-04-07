@@ -3,6 +3,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from 'react-router-dom';
 import { registerUser } from '../api/api.js'
+import { toast } from 'sonner';
 
 
 function Login() {
@@ -15,17 +16,17 @@ function Login() {
 
   const handleregister = async (e) => {
     if (password !== confirmPassword) {
-      toast.error('Passwords do not match!')
+      toast('Passwords do not match!')
     }
 
     try {
       const response = await registerUser({ username, email, password });
       console.log('User register:', response.data);
-      toast.success('Registration successful!');
+      toast('Registration successful!');
       navigate('/login');
     } catch (error) {
       console.error('Registration error:', error.response?.data || error.messege);
-      toast.error('Registration failed!')
+      toast('Registration failed!')
     }
   };
 

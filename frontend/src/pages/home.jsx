@@ -28,8 +28,9 @@ function home() {
 
 
   return (
-    <div className='grid w-full max-w-sm items-center gap-1.5 mx-auto my-74'>
-
+    <div className='grid w-full max-w-sm items-center gap-1.5 mx-auto my-53 border-1 p-6 rounded-2xl'>
+      <h1 className='text-3xl mb-2 relative left-3 font-semibold'>Authentication System</h1>
+      <p className='relative left-2 mb-2'>This Authentication System is a simple and secure user authentication platform. It allows users to register, log in, and log out while securely managing user credentials.</p>
       <Button
         className="text-black cursor-pointer hover:bg-[#d2d2d2]"
         variant="outline"

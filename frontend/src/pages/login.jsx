@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { loginUser } from '../api/api.js';
 import { toast } from 'sonner';
 
-function Login() {
+function login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
@@ -13,10 +13,14 @@ function Login() {
 
     const handleLogin = async (e) => {
         try {
+            if (!email || !password ) {
+                toast('Please fill all the area')
+            }
             const res = await loginUser({ email, password });
             if (!res.data.token) {
                 throw new Error('Token is missing in the response');
             }
+
             toast('Login successful!')
             localStorage.setItem('token', res.data.token)
             navigate('/');
@@ -61,4 +65,4 @@ function Login() {
     );
 }
 
-export default Login;
+export default login;
