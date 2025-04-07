@@ -44,12 +44,12 @@ const loginUser = asynchandler(async (req, res) => {
         const isvalid = await bcrypt.compare(password, existingUser.password)
 
         if (isvalid) {
-            createToken(res, existingUser._id);
-
+            const token = createToken(res, existingUser._id);
             res.status(201).json({
                 _id: existingUser._id,
                 username: existingUser.username,
                 email: existingUser.email,
+                token: token
             });
             return;
         }

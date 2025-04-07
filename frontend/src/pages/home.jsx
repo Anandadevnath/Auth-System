@@ -1,6 +1,7 @@
 import React from 'react'
 import { Button } from "@/components/ui/button";
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
 
 
 function home() {
@@ -14,8 +15,15 @@ function home() {
     navigate('/register');
   };
 
-  const navigatelogout = (e) => {
-    navigate('/logout');
+  const handlelogout = (e) => {
+    try {
+      localStorage.removeItem('token');
+      toast('Logout successful!')
+      navigate('/login');
+    } catch (error) {
+      console.error('Logout error:', error);
+      toast.error('An error occurred during logout.');
+    }
   };
 
 
@@ -41,7 +49,7 @@ function home() {
       <Button
         className="text-black cursor-pointer hover:bg-[#d2d2d2]"
         variant="outline"
-        onClick={navigatelogout}
+        onClick={handlelogout}
       >
         Logout
       </Button>

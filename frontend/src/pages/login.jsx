@@ -14,7 +14,9 @@ function Login() {
     const handleLogin = async (e) => {
         try {
             const res = await loginUser({ email, password });
-            console.log('Login successful:', res.data);
+            if (!res.data.token) {
+                throw new Error('Token is missing in the response');
+            }
             toast('Login successful!')
             localStorage.setItem('token', res.data.token)
             navigate('/');
