@@ -8,15 +8,31 @@ import { toast } from 'sonner';
 function login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [username, setUsername] = useState('');
 
     const navigate = useNavigate();
 
     const handleLogin = async (e) => {
+        e.preventDefault();
+
         try {
-            if (!email || !password ) {
+            if (!email || !password || !username) {
                 toast('Please fill all the area')
+                return;
             }
-            const res = await loginUser({ email, password });
+
+            const res = await loginUser({ email, password, username });
+
+            if (!res.data.username) {
+                toast('Username is incorrect!');
+                return;
+            }
+
+            if (!res.data.email) {
+                toast('Email does not match the username!');
+                return;
+            }
+
             if (!res.data.token) {
                 throw new Error('Token is missing in the response');
             }
@@ -25,8 +41,8 @@ function login() {
             localStorage.setItem('token', res.data.token)
             navigate('/');
         } catch (error) {
-            console.log('Login error:', error.res?.data || error.message);
-            toast('Login failed! Please check your credentials.');
+            console.log('Login error:', error.response?.data || error.message);
+            toast(error.response?.data?.message || 'Login failed! Please check your credentials.');
         }
     };
 
@@ -38,6 +54,8 @@ function login() {
             <Input
                 type="text"
                 placeholder="Username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
             />
             <h1>Email</h1>
             <Input

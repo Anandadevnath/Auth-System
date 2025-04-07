@@ -13,6 +13,7 @@ const createUser = asynchandler(async (req, res) => {
     const userExist = await User.findOne({ email });
     if (userExist) {
         res.status(400).send('User already exists')
+        return;
     }
 
     const salt = await bcrypt.genSalt(10)
@@ -39,23 +40,36 @@ const createUser = asynchandler(async (req, res) => {
 const loginUser = asynchandler(async (req, res) => {
     const { email, password, username } = req.body
 
-    const existingUser = await User.findOne({ email});
-
-    if (existingUser) {
-        const isvalidPassword = await bcrypt.compare(password, existingUser.password)
-
-        if (isvalidPassword) {
-            const token = createToken(res, existingUser._id);
-            res.status(201).json({
-                _id: existingUser._id,
-                username: existingUser.username,
-                email: existingUser.email,
-                token: token
-            });
-            return;
-        }
+    if (!email || !password || !username) {
+        res.status(400);
+        throw new Error("Please provide email, username, and password");
     }
-})
+
+    const existingUser = await User.findOne({ username });
+    if (!existingUser) {
+        res.status(404).json({ message: "Username is incorrect" });
+        return;
+    }
+
+    if (existingUser.email !== email) {
+        res.status(401).json({ message: "Email does not match the username" });
+        return;
+    }
+
+    const isvalidPassword = await bcrypt.compare(password, existingUser.password)
+    if (!isvalidPassword) {
+        res.status(401).json({ message: "Invalid password" });
+        return;
+    }
+
+    const token = createToken(res, existingUser._id);
+    res.status(200).json({
+        _id: existingUser._id,
+        username: existingUser.username,
+        email: existingUser.email,
+        token: token,
+    });
+});
 
 const logoutUser = asynchandler(async (req, res) => {
     res.cookie('jwt', '', {
