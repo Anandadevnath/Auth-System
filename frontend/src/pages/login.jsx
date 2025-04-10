@@ -37,8 +37,14 @@ function login() {
                 throw new Error('Token is missing in the response');
             }
 
+            const userinfo = {
+                username: res.data.username,
+                email: res.data.email,
+                token: res.data.token,
+            }
+
+            localStorage.setItem('token', JSON.stringify(userinfo));
             toast('Login successful!')
-            localStorage.setItem('token', res.data.token)
             navigate('/');
         } catch (error) {
             console.log('Login error:', error.response?.data || error.message);

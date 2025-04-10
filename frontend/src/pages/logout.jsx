@@ -9,10 +9,10 @@ function logout() {
   const handleLogout = () => {
     try {
       localStorage.removeItem('token');
-      toast('Logout successful!')
-      navigate('/')
+      toast('Logout successful!');
+      navigate('/');
     } catch (error) {
-      console.log('Logout error:');
+      console.error('Logout error:', error);
       toast('Logout failed!');
     }
   };
