@@ -43,7 +43,7 @@ function login() {
                 token: res.data.token,
             }
 
-            localStorage.setItem('token', JSON.stringify(userinfo));
+            localStorage.setItem('userInfo', JSON.stringify(userinfo));
             toast('Login successful!')
             navigate('/');
         } catch (error) {
@@ -51,6 +51,7 @@ function login() {
             toast(error.response?.data?.message || 'Login failed! Please check your credentials.');
         }
     };
+
 
     return (
 

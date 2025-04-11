@@ -1,23 +1,31 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Button } from "@/components/ui/button";
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 
 
 function home() {
+  const [userInfo, setUserInfo] = useState(null);
   const navigate = useNavigate();
 
-  const navigateLogin = (e) => {
+  useEffect(() => {
+    const storedUserInfo = localStorage.getItem('userInfo');
+    if (storedUserInfo) {
+      setUserInfo(JSON.parse(storedUserInfo));
+    }
+  }, []);
+
+  const navigateLogin = () => {
     navigate('/login');
   };
 
-  const navigateregister = (e) => {
+  const navigateregister = () => {
     navigate('/register');
   };
 
-  const handlelogout = (e) => {
+  const handlelogout = () => {
     try {
-      localStorage.removeItem('token');
+      localStorage.removeItem('userInfo');
       toast('Logout successful!')
       navigate('/login');
     } catch (error) {
@@ -27,10 +35,20 @@ function home() {
   };
 
 
+
   return (
     <div className='grid w-full max-w-sm items-center gap-1.5 mx-auto my-53 border-1 p-6 rounded-2xl'>
       <h1 className='text-3xl mb-2 relative left-3 font-semibold'>Authentication System</h1>
-      <p className='relative left-2 mb-2'>This Authentication System is a simple and secure user authentication platform. It allows users to register, log in, and log out while securely managing user credentials.</p>
+      <p>
+        {userInfo ? (
+          <>
+            <strong>Username:</strong> {userInfo.username} <br />
+            <strong>Email:</strong> {userInfo.email}
+          </>
+        ) : (
+          'No user is logged in.'
+        )}
+      </p>
       <Button
         className="text-black cursor-pointer hover:bg-[#d2d2d2]"
         variant="outline"
